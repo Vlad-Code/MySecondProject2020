@@ -1,0 +1,44 @@
+{
+  "name": "gendiff-app",
+  "version": "1.0.0",
+  "description": "cli-app for configuration files",
+  "main": "index.js",
+  "bin": {
+    "gendiff": "dist/bin/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vlad-Code/frontend-project-lvl2.git"
+  },
+  "keywords": [
+    "gendiff"
+  ],
+  "author": "Vladislav Kungurov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vlad-Code/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/Vlad-Code/frontend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^5.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.20.1"
+  }
+}
