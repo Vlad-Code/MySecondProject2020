@@ -1,6 +1,6 @@
 This is my second learning project for Frontend JS Profession. I'm creating a cli app here.
 
-![Node.js CI](https://github.com/Vlad-Code/frontend-project-lvl2/workflows/Node.js%20CI/badge.svg)(https://github.com/Vlad-Code/frontend-project-lvl2/actions)
+![Node.js CI](https://github.com/Vlad-Code/frontend-project-lvl2/workflows/Node.js%20CI/badge.svg)](https://github.com/Vlad-Code/frontend-project-lvl2/actions)
 
 <a href="https://codeclimate.com/github/Vlad-Code/frontend-project-lvl2/maintainability"><img src="https://api.codeclimate.com/v1/badges/61fb1d9a5c0a94d2d5db/maintainability" /></a>
 
