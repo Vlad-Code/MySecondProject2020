@@ -19,22 +19,30 @@ jobs:
         node-version: [13.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Run linter
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+        - name: npm install, build
+        # Install and build project
         run: |
-          make lint
-    - name: Test & publish code coverage
+          make install
+          make build
+        # Add environment variables
+        env:
+          CI: true  
+      - name: Run linter
+          run: |
+            make lint
+      - name: Test & publish code coverage
         # Publish code coverage on Code Climate
         # https://github.com/paambaati/codeclimate-action
-      uses: paambaati/codeclimate-action@v2.4.0
+        uses: paambaati/codeclimate-action@v2.4.0
         # Add Code Climate secret key
-      env:
-        CC_TEST_REPORTER_ID: ${{ae71cfa861ee1d0977ddf581bd85f59fb08deada0398165f44fa682bcf917ec8}}
-      with:
-        coverageCommand: make test-coverage
-        debug: true  
+        env:
+          CC_TEST_REPORTER_ID: ${{ae71cfa861ee1d0977ddf581bd85f59fb08deada0398165f44fa682bcf917ec8}}
+        with:
+          coverageCommand: make test-coverage
+          debug: true  
     
