@@ -31,6 +31,14 @@ jobs:
         # The Node.js version to configure
         with:
           node-version: ${{ matrix.node-version }}
+      - name: npm install, build
+        # Install and build project
+        run: |
+          make install-deps
+          make build
+        # Add environment variables
+        env:
+          CI: true
       - name: Run linter
         # Run Linter
         run: |
