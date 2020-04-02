@@ -25,21 +25,16 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: npm install, build
-        # Install and build project
           run: |
             make install
             make build
-        # Add environment variables
         env:
           CI: true  
       - name: Run linter
           run: |
             make lint
       - name: Test & publish code coverage
-        # Publish code coverage on Code Climate
-        # https://github.com/paambaati/codeclimate-action
         uses: paambaati/codeclimate-action@v2.4.0
-        # Add Code Climate secret key
         env:
           CC_TEST_REPORTER_ID: ${{ae71cfa861ee1d0977ddf581bd85f59fb08deada0398165f44fa682bcf917ec8}}
         with:
