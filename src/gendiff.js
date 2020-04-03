@@ -1,10 +1,8 @@
-const fs = require('fs');
-
-const path = require('path');
+import parseFile from './parsers';
 
 const gendiff = (firstConfig, secondConfig) => {
-  const object1 = JSON.parse(fs.readFileSync(`${path.resolve('/home/vladislav/', `${firstConfig}`)}`));
-  const object2 = JSON.parse(fs.readFileSync(`${path.resolve('/home/vladislav/', `${secondConfig}`)}`));
+  const object1 = parseFile(firstConfig);
+  const object2 = parseFile(secondConfig);
   const keysOfObject1 = Object.keys(object1);
   const keysOfObject2 = Object.keys(object2);
   const checkfirstConfig = keysOfObject1.reduce((acc, key) => {
