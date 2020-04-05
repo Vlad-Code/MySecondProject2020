@@ -15,3 +15,10 @@ test('gendiff-yml', () => {
   const result = fs.readFileSync(`${__dirname}/../__fixtures__/result.txt`, 'utf-8');
   expect(gendiff(firstConfig, secondConfig)).toEqual(result);
 });
+
+test('gendiff-ini', () => {
+  const firstConfig = `${__dirname}/../__fixtures__/before.ini`;
+  const secondConfig = `${__dirname}/../__fixtures__/after.ini`;
+  const result = fs.readFileSync(`${__dirname}/../__fixtures__/result.txt`, 'utf-8');
+  expect(gendiff(firstConfig, secondConfig)).toEqual(result);
+});
