@@ -7,3 +7,5 @@ This is my second learning project for Frontend JS Profession. I'm creating a cl
 Asciinema of the third step of my project <a href="https://asciinema.org/a/315162" target="_blank"><img src="https://asciinema.org/a/315162.svg" /></a>
 
 Asciinema of the fifth step of my project <a href="https://asciinema.org/a/316318" target="_blank"><img src="https://asciinema.org/a/316318.svg" /></a>
+
+Asciinema of the fifth step of my project Asciinema <a href="https://asciinema.org/a/316847" target="_blank"><img src="https://asciinema.org/a/316847.svg" /></a>
