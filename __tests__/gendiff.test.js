@@ -1,24 +1,17 @@
 import fs from 'fs';
 
-import gendiff from '../src/gendiff.js';
+import parseFile from '../src/parsers';
 
-test('gendiff-json', () => {
-  const firstConfig = `${__dirname}/../__fixtures__/before.json`;
-  const secondConfig = `${__dirname}/../__fixtures__/after.json`;
-  const result = fs.readFileSync(`${__dirname}/../__fixtures__/result.txt`, 'utf-8');
-  expect(gendiff(firstConfig, secondConfig)).toEqual(result);
-});
+import dif from '../src/dif';
 
-test('gendiff-yml', () => {
-  const firstConfig = `${__dirname}/../__fixtures__/before.yml`;
-  const secondConfig = `${__dirname}/../__fixtures__/after.yml`;
-  const result = fs.readFileSync(`${__dirname}/../__fixtures__/result.txt`, 'utf-8');
-  expect(gendiff(firstConfig, secondConfig)).toEqual(result);
-});
+import resultRender from '../src/gendiff-for-tree';
 
-test('gendiff-ini', () => {
-  const firstConfig = `${__dirname}/../__fixtures__/before.ini`;
-  const secondConfig = `${__dirname}/../__fixtures__/after.ini`;
-  const result = fs.readFileSync(`${__dirname}/../__fixtures__/result.txt`, 'utf-8');
-  expect(gendiff(firstConfig, secondConfig)).toEqual(result);
+test('gendiff-tree', () => {
+  const firstConfig = `${__dirname}/../__fixtures__/before-tree.json`;
+  const secondConfig = `${__dirname}/../__fixtures__/after-tree.json`;
+  const object1 = parseFile(firstConfig);
+  const object2 = parseFile(secondConfig);
+  const diff = dif(object1, object2);
+  const result = fs.readFileSync(`${__dirname}/../__fixtures__/result-tree.txt`, 'utf-8');
+  expect(resultRender(object1, object2, diff, '  ')).toEqual(result);
 });
