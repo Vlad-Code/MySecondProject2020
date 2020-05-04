@@ -1,31 +1,22 @@
+import dif from './dif';
+
 import parseFile from './parsers';
 
-const gendiff = (firstConfig, secondConfig) => {
+import resultRender from './formaters/render';
+
+import plain from './formaters/plain';
+
+const gendiff = (firstConfig, secondConfig, format) => {
   const object1 = parseFile(firstConfig);
   const object2 = parseFile(secondConfig);
-  const keysOfObject1 = Object.keys(object1).sort();
-  const keysOfObject2 = Object.keys(object2).sort();
-  const checkfirstConfig = keysOfObject1.reduce((acc, key) => {
-    if (!keysOfObject2.includes(key)) {
-      acc.push(` - ${key}: ${object1[key]}`);
-    }
-    if (keysOfObject2.includes(key)) {
-      if (object2[key] === object1[key]) {
-        acc.push(`   ${key}: ${object2[key]}`);
-      } else {
-        acc.push(` - ${key}: ${object1[key]}`);
-        acc.push(` + ${key}: ${object2[key]}`);
-      }
-    }
-    return acc;
-  }, []);
-  const result = keysOfObject2.reduce((acc, key) => {
-    if (!keysOfObject1.includes(key)) {
-      acc.push(` + ${key}: ${object2[key]}`);
-    }
-    return acc;
-  }, checkfirstConfig);
-  return `{\n ${result.join('\n ')}\n}`;
+  const diff = dif(object1, object2);
+  if (format === 'default') {
+    return resultRender(object1, object2, diff, '  ');
+  }
+  if (format === 'plain') {
+    return plain(diff, object1, object2);
+  }
+  return null;
 };
 
 export default gendiff;

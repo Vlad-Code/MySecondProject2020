@@ -1,17 +1,25 @@
 import fs from 'fs';
 
-import parseFile from '../src/parsers';
+import gendiff from '../src/gendiff';
 
-import dif from '../src/dif';
 
-import resultRender from '../src/gendiff-for-tree';
+const firstConfigJSON = `${__dirname}/../__fixtures__/before-tree.json`;
+const secondConfigJSON = `${__dirname}/../__fixtures__/after-tree.json`;
+const firstConfigYAML = `${__dirname}/../__fixtures__/before-tree.yml`;
+const secondConfigYAML = `${__dirname}/../__fixtures__/after-tree.yml`;
+const firstConfigINI = `${__dirname}/../__fixtures__/before-tree.ini`;
+const secondConfigINI = `${__dirname}/../__fixtures__/after-tree.ini`;
 
-test('gendiff-tree', () => {
-  const firstConfig = `${__dirname}/../__fixtures__/before-tree.json`;
-  const secondConfig = `${__dirname}/../__fixtures__/after-tree.json`;
-  const object1 = parseFile(firstConfig);
-  const object2 = parseFile(secondConfig);
-  const diff = dif(object1, object2);
+test('gendiff-tree-for-all-formats', () => {
   const result = fs.readFileSync(`${__dirname}/../__fixtures__/result-tree.txt`, 'utf-8');
-  expect(resultRender(object1, object2, diff, '  ')).toEqual(result);
+  expect(gendiff(firstConfigJSON, secondConfigJSON, 'default')).toEqual(result);
+  expect(gendiff(firstConfigYAML, secondConfigYAML, 'default')).toEqual(result);
+  expect(gendiff(firstConfigINI, secondConfigINI, 'default')).toEqual(result);
+});
+
+test('gendiff-plain-for-all-formats', () => {
+  const result = fs.readFileSync(`${__dirname}/../__fixtures__/result-for-plain-format.txt`, 'utf-8');
+  expect(gendiff(firstConfigJSON, secondConfigJSON, 'plain')).toEqual(result);
+  expect(gendiff(firstConfigYAML, secondConfigYAML, 'plain')).toEqual(result);
+  expect(gendiff(firstConfigINI, secondConfigINI, 'plain')).toEqual(result);
 });

@@ -4,7 +4,7 @@
   "description": "cli-app for configuration files",
   "main": "index.js",
   "bin": {
-    "gendiff": "dist/bin/index.js"
+    "gendiff": "dist/bin/gendiff-app.js"
   },
   "files": [
     "dist"
