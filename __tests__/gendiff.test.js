@@ -23,3 +23,10 @@ test('gendiff-plain-for-all-formats', () => {
   expect(gendiff(firstConfigYAML, secondConfigYAML, 'plain')).toEqual(result);
   expect(gendiff(firstConfigINI, secondConfigINI, 'plain')).toEqual(result);
 });
+
+test('gendiff-json-for-all-formats', () => {
+  const result = fs.readFileSync(`${__dirname}/../__fixtures__/result-for-json.json`, 'utf-8');
+  expect(gendiff(firstConfigJSON, secondConfigJSON, 'json')).toEqual(result);
+  expect(gendiff(firstConfigYAML, secondConfigYAML, 'json')).toEqual(result);
+  expect(gendiff(firstConfigINI, secondConfigINI, 'json')).toEqual(result);
+});
