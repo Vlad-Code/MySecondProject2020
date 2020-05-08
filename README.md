@@ -13,3 +13,5 @@ Asciinema of the sixth step of my project <a href="https://asciinema.org/a/31684
 Asciinema of the seventh step of my project <a href="https://asciinema.org/a/326917" target="_blank"><img src="https://asciinema.org/a/326917.svg" /></a>
 
 Asciinema of the eighth step of my project <a href="https://asciinema.org/a/326922" target="_blank"><img src="https://asciinema.org/a/326922.svg" /></a>
+
+Asciinema of the finish step of my project <a href="https://asciinema.org/a/327868" target="_blank"><img src="https://asciinema.org/a/327868.svg" /></a>
