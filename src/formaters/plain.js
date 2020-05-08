@@ -1,13 +1,5 @@
-const isObject = (value) => {
-  const isArray = Object.prototype.toString.call(value) === '[object Array]';
-  if (value === null) {
-    return false;
-  }
-  if (typeof (value) === 'object' && isArray === false) {
-    return true;
-  }
-  return false;
-};
+import isObject from '../isObject';
+
 const stringify = (value) => {
   if (isObject(value)) {
     return '[comlex value]';
@@ -17,28 +9,28 @@ const stringify = (value) => {
   }
   return value;
 };
-const iter = (dif, path = '') => {
-  const arrOfKeys = Object.keys(dif);
+const iter = (diff, path = '') => {
+  const arrOfKeys = Object.keys(diff);
   return arrOfKeys.map((key) => {
-    if (!isObject(dif[key])) {
+    if (!isObject(diff[key])) {
       return `${path}${key}`;
     }
     const newPath = `${path}${key}.`;
-    return iter(dif[key], newPath);
+    return iter(diff[key], newPath);
   });
 };
 const getValue = (path, object) => {
-  const arr = path.split('.');
-  const value = arr.reduce((acc, item) => {
-    const value1 = acc[item];
-    return value1;
+  const arrOfPath = path.split('.');
+  const value = arrOfPath.reduce((acc, item) => {
+    const newValue = acc[item];
+    return newValue;
   }, object);
   return value;
 };
-const plain = (dif, firstConfig, secondConfig, path = '') => {
-  const pathes = iter(dif, path).flat(Infinity).sort();
-  const arr = pathes.map((item) => {
-    switch (getValue(item, dif)) {
+const getPlain = (diff, firstConfig, secondConfig, path = '') => {
+  const pathes = iter(diff, path).flat(Infinity).sort();
+  const arrOfStr = pathes.map((item) => {
+    switch (getValue(item, diff)) {
       case 'not changed':
         return `Property '${item}' was not changed`;
       case 'deleted':
@@ -51,7 +43,7 @@ const plain = (dif, firstConfig, secondConfig, path = '') => {
         return null;
     }
   });
-  return arr.join('\n');
+  return arrOfStr.join('\n');
 };
 
-export default plain;
+export default getPlain;

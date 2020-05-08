@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import gendiff from '../src/gendiff';
+import gendiff from '../src/index';
 
 
 const firstConfigJSON = `${__dirname}/../__fixtures__/before-tree.json`;
@@ -10,11 +10,11 @@ const secondConfigYAML = `${__dirname}/../__fixtures__/after-tree.yml`;
 const firstConfigINI = `${__dirname}/../__fixtures__/before-tree.ini`;
 const secondConfigINI = `${__dirname}/../__fixtures__/after-tree.ini`;
 
-test('gendiff-tree-for-all-formats', () => {
+test('gendiff-stylish-for-all-formats', () => {
   const result = fs.readFileSync(`${__dirname}/../__fixtures__/result-tree.txt`, 'utf-8');
-  expect(gendiff(firstConfigJSON, secondConfigJSON, 'default')).toEqual(result);
-  expect(gendiff(firstConfigYAML, secondConfigYAML, 'default')).toEqual(result);
-  expect(gendiff(firstConfigINI, secondConfigINI, 'default')).toEqual(result);
+  expect(gendiff(firstConfigJSON, secondConfigJSON, 'stylish')).toEqual(result);
+  expect(gendiff(firstConfigYAML, secondConfigYAML, 'stylish')).toEqual(result);
+  expect(gendiff(firstConfigINI, secondConfigINI, 'stylish')).toEqual(result);
 });
 
 test('gendiff-plain-for-all-formats', () => {

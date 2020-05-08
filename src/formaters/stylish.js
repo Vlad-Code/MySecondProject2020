@@ -1,31 +1,23 @@
-const isObject = (value) => {
-  const isArray = Object.prototype.toString.call(value) === '[object Array]';
-  if (value === null) {
-    return false;
-  }
-  if (typeof (value) === 'object' && isArray === false) {
-    return true;
-  }
-  return false;
-};
+import isObject from '../isObject';
+
 const stringify = (object, space) => {
   if (isObject(object)) {
-    const keys = Object.keys(object);
-    const arr = keys.reduce((acc, key) => {
+    const keysOfObject = Object.keys(object);
+    const arrOfStr = keysOfObject.reduce((acc, key) => {
       acc.push(`      ${key}: ${object[key]}`);
       return acc;
     }, []);
-    return `{\n${space}${arr.join('\n')}\n${space}  }`;
+    return `{\n${space}${arrOfStr.join('\n')}\n${space}  }`;
   }
   return object;
 };
-const render = (firstConfig, secondConfig, dif, space) => {
-  const keysOfDif = Object.keys(dif).sort();
-  const arrOfStr = keysOfDif.reduce((acc, key) => {
-    if (isObject(dif[key])) {
-      acc.push(`  ${space}${key}: {\n${render(firstConfig[key], secondConfig[key], dif[key], `${space}    `)}\n${space}  }`);
+const getStylish = (firstConfig, secondConfig, diff, space) => {
+  const keysOfDiff = Object.keys(diff).sort();
+  const arrOfStr = keysOfDiff.reduce((acc, key) => {
+    if (isObject(diff[key])) {
+      acc.push(`  ${space}${key}: {\n${getStylish(firstConfig[key], secondConfig[key], diff[key], `${space}    `)}\n${space}  }`);
     } else {
-      switch (dif[key]) {
+      switch (diff[key]) {
         case 'not changed':
           acc.push(`${space}  ${key}: ${stringify(firstConfig[key], space)}`);
           break;
@@ -48,6 +40,6 @@ const render = (firstConfig, secondConfig, dif, space) => {
   const result = arrOfStr.join('\n');
   return result;
 };
-const resultRender = (firstConfig, secondConfig, dif, space) => `{\n${render(firstConfig, secondConfig, dif, space)}\n}`;
+const getResultStylish = (firstConfig, secondConfig, diff, space) => `{\n${getStylish(firstConfig, secondConfig, diff, space)}\n}`;
 
-export default resultRender;
+export default getResultStylish;
