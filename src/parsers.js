@@ -1,18 +1,17 @@
-const fs = require('fs');
-const yaml = require('js-yaml');
-const path = require('path');
-const ini = require('ini');
+import yaml from 'js-yaml';
+import ini from 'ini';
 
-const parseFile = (configFile) => {
-  const configPath = path.resolve('/home/vladislav/', configFile);
-  const format = path.extname(configPath);
-  if (format === '.json') {
-    return JSON.parse(fs.readFileSync(configPath, 'utf8'));
+const parseData = (dataAndFormat) => {
+  switch (dataAndFormat.format) {
+    case '.json':
+      return JSON.parse(dataAndFormat.data);
+    case '.yml':
+      return yaml.safeLoad(dataAndFormat.data);
+    case '.ini':
+      return ini.parse(dataAndFormat.data);
+    default:
+      throw new Error('Unknown state!');
   }
-  if (format === '.ini') {
-    return ini.parse(fs.readFileSync(configPath, 'utf-8'));
-  }
-  return yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
 };
 
-export default parseFile;
+export default parseData;

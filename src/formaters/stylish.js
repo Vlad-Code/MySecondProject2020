@@ -1,4 +1,4 @@
-import isObject from '../isObject';
+import { isObject } from 'lodash';
 
 const stringify = (object, space) => {
   if (isObject(object)) {

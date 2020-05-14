@@ -1,4 +1,4 @@
-import isObject from './isObject';
+import { isObject } from 'lodash';
 
 const getDiff = (firstConfig, secondConfig) => {
   const keysOfFile1 = Object.keys(firstConfig);

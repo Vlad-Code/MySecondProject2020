@@ -1,27 +1,15 @@
-import getDiff from './getDiff';
+import getDiff from './builddiff';
+import getDataAndFormat from './data_and_format';
+import parseData from './parsers';
+import getResult from './formaters/index';
 
-import parseFile from './parsers';
-
-import getResultStylish from './formaters/stylish';
-
-import getPlain from './formaters/plain';
-
-import getJson from './formaters/json';
-
-const gendiff = (firstConfig, secondConfig, format) => {
-  const object1 = parseFile(firstConfig);
-  const object2 = parseFile(secondConfig);
-  const diff = getDiff(object1, object2);
-  if (format === 'stylish') {
-    return getResultStylish(object1, object2, diff, '  ');
-  }
-  if (format === 'plain') {
-    return getPlain(diff, object1, object2);
-  }
-  if (format === 'json') {
-    return getJson(diff, object1, object2);
-  }
-  return null;
+const gendiff = (pathToFile1, pathToFile2, format) => {
+  const dataAndFormatOfFile1 = getDataAndFormat(pathToFile1);
+  const dataAndFormatOfFile2 = getDataAndFormat(pathToFile2);
+  const parsedContentOfFile1 = parseData(dataAndFormatOfFile1);
+  const parsedContentOfFile2 = parseData(dataAndFormatOfFile2);
+  const diff = getDiff(parsedContentOfFile1, parsedContentOfFile2);
+  return getResult(parsedContentOfFile1, parsedContentOfFile2, diff, format);
 };
 
 export default gendiff;
