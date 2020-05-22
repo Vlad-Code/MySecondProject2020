@@ -32,7 +32,7 @@ const getStylish = (firstConfig, secondConfig, diff, space) => {
           acc.push(`${space}+ ${key}: ${stringify(secondConfig[key], space)}`);
           break;
         default:
-          return null;
+          throw new Error(`Unknown state: ${diff[key]}`);
       }
     }
     return acc;

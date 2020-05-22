@@ -1,16 +1,16 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parseData = (dataAndFormat) => {
-  switch (dataAndFormat.format) {
+const parseData = (data, format) => {
+  switch (format) {
     case '.json':
-      return JSON.parse(dataAndFormat.data);
+      return JSON.parse(data);
     case '.yml':
-      return yaml.safeLoad(dataAndFormat.data);
+      return yaml.safeLoad(data);
     case '.ini':
-      return ini.parse(dataAndFormat.data);
+      return ini.parse(data);
     default:
-      throw new Error('Unknown state!');
+      throw new Error(`Unsupported format of file: '${format}!'`);
   }
 };
 

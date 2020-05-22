@@ -1,13 +1,15 @@
-import getDiff from './builddiff';
-import getDataAndFormat from './data_and_format';
+import getDiff from './builder_of_diff';
+import { readFile, getFormatOfFile } from './data_and_format';
 import parseData from './parsers';
 import getResult from './formaters/index';
 
 const gendiff = (pathToFile1, pathToFile2, format) => {
-  const dataAndFormatOfFile1 = getDataAndFormat(pathToFile1);
-  const dataAndFormatOfFile2 = getDataAndFormat(pathToFile2);
-  const parsedContentOfFile1 = parseData(dataAndFormatOfFile1);
-  const parsedContentOfFile2 = parseData(dataAndFormatOfFile2);
+  const contentOfFile1 = readFile(pathToFile1);
+  const contentOfFile2 = readFile(pathToFile2);
+  const formatOfFile1 = getFormatOfFile(pathToFile1);
+  const formatOfFile2 = getFormatOfFile(pathToFile2);
+  const parsedContentOfFile1 = parseData(contentOfFile1, formatOfFile1);
+  const parsedContentOfFile2 = parseData(contentOfFile2, formatOfFile2);
   const diff = getDiff(parsedContentOfFile1, parsedContentOfFile2);
   return getResult(parsedContentOfFile1, parsedContentOfFile2, diff, format);
 };

@@ -32,7 +32,7 @@ const getStringForJson = (diff, firstConfig, secondConfig) => {
           acc.push(`{"key":${stringify(key)}, "status":${stringify(diff[key])}, "value": ${stringify(secondConfig[key])}}`);
           break;
         default:
-          return null;
+          throw new Error(`Unknown state: ${diff[key]}`);
       }
     } else {
       acc.push(`{"key":${stringify(key)}, "value":[${getStringForJson(diff[key], firstConfig[key], secondConfig[key])}]}`);

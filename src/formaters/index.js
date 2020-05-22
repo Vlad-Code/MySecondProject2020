@@ -11,7 +11,7 @@ const getResult = (parsedData1, parsedData2, diff, format) => {
     case 'json':
       return getJson(diff, parsedData1, parsedData2);
     default:
-      throw new Error('Unknown state!');
+      throw new Error(`Unknown format of output: ${format}`);
   }
 };
 

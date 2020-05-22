@@ -40,7 +40,7 @@ const getPlain = (diff, firstConfig, secondConfig, path = '') => {
       case 'added':
         return `Property '${item}' was added with value: ${stringify(getValue(item, secondConfig))}`;
       default:
-        return null;
+        throw new Error(`Unknown state: ${getValue(item, diff)}`);
     }
   });
   return arrOfStr.join('\n');

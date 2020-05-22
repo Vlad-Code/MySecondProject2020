@@ -1,11 +1,18 @@
 import fs from 'fs';
 import path from 'path';
+import process from 'process';
 
-const getDataAndFormat = (pathToFile) => {
-  const configPath = path.resolve('/home/vladislav/', pathToFile);
-  const format = path.extname(configPath);
+const readFile = (pathToFile) => {
+  const configPath = path.resolve(process.cwd(), pathToFile);
   const data = fs.readFileSync(configPath, 'utf8');
-  return { data, format };
+  return data;
+};
+const getFormatOfFile = (pathToFile) => {
+  const format = path.extname(pathToFile);
+  return format;
 };
 
-export default getDataAndFormat;
+export {
+  readFile,
+  getFormatOfFile,
+};
