@@ -3,46 +3,38 @@ import { isObject } from 'lodash';
 const stringify = (value) => {
   if (isObject(value)) {
     const keysOfValue = Object.keys(value);
-    const arrOfStr = keysOfValue.reduce((acc, key) => {
-      acc.push(`"${key}": "${value[key]}"`);
-      return acc;
-    }, []);
-    return `{ ${arrOfStr.join(',')} }`;
+    const arrOfStrings = keysOfValue.map((key) => `"${key}": "${value[key]}"`);
+    return `{ ${arrOfStrings.join(',')} }`;
   }
   if (typeof (value) === 'string') {
     return `"${value}"`;
   }
   return value;
 };
-const getStringForJson = (diff, firstConfig, secondConfig) => {
-  const keysOfDiff = Object.keys(diff).sort();
-  const arrOfJsons = keysOfDiff.reduce((acc, key) => {
-    if (!isObject(diff[key])) {
-      switch (diff[key]) {
+const getStringForJson = (diff, fileContent1, fileContent2) => {
+  const normalizeDiff = diff.sort();
+  const arrOfJsonStrings = normalizeDiff.map((node) => {
+    const [key, state] = node;
+    if (!isObject(state)) {
+      switch (state) {
         case 'not changed':
-          acc.push(`{"key":${stringify(key)}, "status":${stringify(diff[key])}}`);
-          break;
+          return `{"key":${stringify(key)}, "status":${stringify(state)}}`;
         case 'deleted':
-          acc.push(`{"key":${stringify(key)}, "status":${stringify(diff[key])}}`);
-          break;
+          return `{"key":${stringify(key)}, "status":${stringify(state)}}`;
         case 'changed':
-          acc.push(`{"key":${stringify(key)}, "status":${stringify(diff[key])}, "value-before":${stringify(firstConfig[key])}, "value-after":${stringify(secondConfig[key])}}`);
-          break;
+          return `{"key":${stringify(key)}, "status":${stringify(state)}, "value-before":${stringify(fileContent1[key])}, "value-after":${stringify(fileContent2[key])}}`;
         case 'added':
-          acc.push(`{"key":${stringify(key)}, "status":${stringify(diff[key])}, "value": ${stringify(secondConfig[key])}}`);
-          break;
+          return `{"key":${stringify(key)}, "status":${stringify(state)}, "value": ${stringify(fileContent2[key])}}`;
         default:
-          throw new Error(`Unknown state: ${diff[key]}`);
+          throw new Error(`Unknown state: ${state}`);
       }
-    } else {
-      acc.push(`{"key":${stringify(key)}, "value":[${getStringForJson(diff[key], firstConfig[key], secondConfig[key])}]}`);
     }
-    return acc;
-  }, []);
-  return `${arrOfJsons.join(', ')}`;
+    return `{"key":${stringify(key)}, "value":[${getStringForJson(state, fileContent1[key], fileContent2[key])}]}`;
+  });
+  return `${arrOfJsonStrings.join(', ')}`;
 };
-const getJson = (diff, firstConfig, secondConfig) => {
-  const result = `[${getStringForJson(diff, firstConfig, secondConfig)}]`;
+const getJson = (diff, fileContent1, fileContent2) => {
+  const result = `[${getStringForJson(diff, fileContent1, fileContent2)}]`;
   const jsonFormat = JSON.parse(result);
   return JSON.stringify(jsonFormat);
 };

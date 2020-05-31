@@ -7,12 +7,12 @@ const readFile = (pathToFile) => {
   const data = fs.readFileSync(configPath, 'utf8');
   return data;
 };
-const getFormatOfFile = (pathToFile) => {
-  const format = path.extname(pathToFile);
-  return format;
+const getExtensionOfPath = (pathToFile) => {
+  const extension = path.extname(pathToFile);
+  return extension;
 };
 
 export {
   readFile,
-  getFormatOfFile,
+  getExtensionOfPath,
 };

@@ -10,14 +10,16 @@ const stringify = (value) => {
   return value;
 };
 const iter = (diff, path = '') => {
-  const arrOfKeys = Object.keys(diff);
-  return arrOfKeys.map((key) => {
-    if (!isObject(diff[key])) {
-      return `${path}${key}`;
+  const accumulatedPath = diff.map((node) => {
+    const [key, state] = node;
+    if (!isObject(state)) {
+      const pathToValue = `${path}${key}`;
+      return { [pathToValue]: state };
     }
     const newPath = `${path}${key}.`;
-    return iter(diff[key], newPath);
+    return iter(state, newPath);
   });
+  return accumulatedPath;
 };
 const getValue = (path, object) => {
   const arrOfPath = path.split('.');
@@ -27,23 +29,24 @@ const getValue = (path, object) => {
   }, object);
   return value;
 };
-const getPlain = (diff, firstConfig, secondConfig, path = '') => {
-  const pathes = iter(diff, path).flat(Infinity).sort();
-  const arrOfStr = pathes.map((item) => {
-    switch (getValue(item, diff)) {
+const getPlain = (diff, fileContent1, fileContent2, path = '') => {
+  const pathesAndValues = iter(diff, path).flat(Infinity).sort();
+  const arrOfStr = pathesAndValues.map((item) => {
+    const [accumulatedPath, state] = Object.entries(item).flat();
+    switch (state) {
       case 'not changed':
-        return `Property '${item}' was not changed`;
+        return `Property '${accumulatedPath}' was not changed`;
       case 'deleted':
-        return `Property '${item}' was deleted`;
+        return `Property '${accumulatedPath}' was deleted`;
       case 'changed':
-        return `Property '${item}' was changed from ${stringify(getValue(item, firstConfig))} to ${stringify(getValue(item, secondConfig))}`;
+        return `Property '${accumulatedPath}' was changed from ${stringify(getValue(accumulatedPath, fileContent1))} to ${stringify(getValue(accumulatedPath, fileContent2))}`;
       case 'added':
-        return `Property '${item}' was added with value: ${stringify(getValue(item, secondConfig))}`;
+        return `Property '${accumulatedPath}' was added with value: ${stringify(getValue(accumulatedPath, fileContent2))}`;
       default:
-        throw new Error(`Unknown state: ${getValue(item, diff)}`);
+        throw new Error(`Unknown state: ${state}`);
     }
   });
-  return arrOfStr.join('\n');
+  return arrOfStr.sort().join('\n');
 };
 
 export default getPlain;

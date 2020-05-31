@@ -1,8 +1,8 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parseData = (data, format) => {
-  switch (format) {
+const parseData = (data, extension) => {
+  switch (extension) {
     case '.json':
       return JSON.parse(data);
     case '.yml':
@@ -10,7 +10,7 @@ const parseData = (data, format) => {
     case '.ini':
       return ini.parse(data);
     default:
-      throw new Error(`Unsupported format of file: '${format}!'`);
+      throw new Error(`Unsupported extension of path to file: '${extension}!'`);
   }
 };
 

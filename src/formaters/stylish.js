@@ -11,35 +11,30 @@ const stringify = (object, space) => {
   }
   return object;
 };
-const getStylish = (firstConfig, secondConfig, diff, space) => {
-  const keysOfDiff = Object.keys(diff).sort();
-  const arrOfStr = keysOfDiff.reduce((acc, key) => {
-    if (isObject(diff[key])) {
-      acc.push(`  ${space}${key}: {\n${getStylish(firstConfig[key], secondConfig[key], diff[key], `${space}    `)}\n${space}  }`);
-    } else {
-      switch (diff[key]) {
-        case 'not changed':
-          acc.push(`${space}  ${key}: ${stringify(firstConfig[key], space)}`);
-          break;
-        case 'deleted':
-          acc.push(`${space}- ${key}: ${stringify(firstConfig[key], space)}`);
-          break;
-        case 'changed':
-          acc.push(`${space}- ${key}: ${stringify(firstConfig[key], space)}`);
-          acc.push(`${space}+ ${key}: ${stringify(secondConfig[key], space)}`);
-          break;
-        case 'added':
-          acc.push(`${space}+ ${key}: ${stringify(secondConfig[key], space)}`);
-          break;
-        default:
-          throw new Error(`Unknown state: ${diff[key]}`);
-      }
+const getStylish = (fileContent1, fileContent2, diff, space) => {
+  const normalizeDiff = diff.sort();
+  const arrOfStr = normalizeDiff.map((node) => {
+    const [key, state] = node;
+    if (isObject(state)) {
+      return `  ${space}${key}: {\n${getStylish(fileContent1[key], fileContent2[key], state, `${space}    `)}\n${space}  }`;
     }
-    return acc;
-  }, []);
-  const result = arrOfStr.join('\n');
+    switch (state) {
+      case 'not changed':
+        return `${space}  ${key}: ${stringify(fileContent1[key], space)}`;
+      case 'deleted':
+        return `${space}- ${key}: ${stringify(fileContent1[key], space)}`;
+      case 'changed':
+        return [`${space}- ${key}: ${stringify(fileContent1[key], space)}`,
+          `${space}+ ${key}: ${stringify(fileContent2[key], space)}`];
+      case 'added':
+        return `${space}+ ${key}: ${stringify(fileContent2[key], space)}`;
+      default:
+        throw new Error(`Unknown state: ${state}`);
+    }
+  });
+  const result = arrOfStr.flat().join('\n');
   return result;
 };
-const getResultStylish = (firstConfig, secondConfig, diff, space) => `{\n${getStylish(firstConfig, secondConfig, diff, space)}\n}`;
+const getResultStylish = (fileContent1, fileContent2, diff, space) => `{\n${getStylish(fileContent1, fileContent2, diff, space)}\n}`;
 
 export default getResultStylish;
