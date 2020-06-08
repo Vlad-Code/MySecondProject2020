@@ -11,13 +11,13 @@ const stringify = (value) => {
 };
 const iter = (diff, path = '') => {
   const accumulatedPath = diff.map((node) => {
-    const [key, state] = node;
-    if (!isObject(state)) {
+    const { key, type, children } = node;
+    if (!children) {
       const pathToValue = `${path}${key}`;
-      return { [pathToValue]: state };
+      return { [pathToValue]: type };
     }
     const newPath = `${path}${key}.`;
-    return iter(state, newPath);
+    return iter(children, newPath);
   });
   return accumulatedPath;
 };
@@ -32,8 +32,8 @@ const getValue = (path, object) => {
 const getPlain = (diff, fileContent1, fileContent2, path = '') => {
   const pathesAndValues = iter(diff, path).flat(Infinity).sort();
   const arrOfStr = pathesAndValues.map((item) => {
-    const [accumulatedPath, state] = Object.entries(item).flat();
-    switch (state) {
+    const [accumulatedPath, type] = Object.entries(item).flat();
+    switch (type) {
       case 'not changed':
         return `Property '${accumulatedPath}' was not changed`;
       case 'deleted':
@@ -43,7 +43,7 @@ const getPlain = (diff, fileContent1, fileContent2, path = '') => {
       case 'added':
         return `Property '${accumulatedPath}' was added with value: ${stringify(getValue(accumulatedPath, fileContent2))}`;
       default:
-        throw new Error(`Unknown state: ${state}`);
+        throw new Error(`Unknown type: ${type}`);
     }
   });
   return arrOfStr.sort().join('\n');

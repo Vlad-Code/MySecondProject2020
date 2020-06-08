@@ -1,23 +1,21 @@
-import { uniq, isObject } from 'lodash';
+import { union, isObject, has } from 'lodash';
 
-const getDiff = (fileContent1, fileContent2) => {
-  const keysOfFileContent1 = Object.keys(fileContent1);
-  const keysOfFileContent2 = Object.keys(fileContent2);
-  const commonKeys = uniq(keysOfFileContent1.concat(keysOfFileContent2));
+const getDiff = (object1, object2) => {
+  const commonKeys = union(Object.keys(object1), Object.keys(object2));
   const diff = commonKeys.map((key) => {
-    if (isObject(fileContent1[key]) && isObject(fileContent2[key])) {
-      return [key, getDiff(fileContent1[key], fileContent2[key])];
+    if (object1[key] && object2[key]) {
+      if (isObject(object1[key]) && isObject(object2[key])) {
+        return { key, type: 'unknown', children: getDiff(object1[key], object2[key]) };
+      }
+      if (object1[key] === object2[key]) {
+        return { key, type: 'not changed' };
+      }
+      return { key, type: 'changed' };
     }
-    if (keysOfFileContent1.includes(key) && !keysOfFileContent2.includes(key)) {
-      return [key, 'deleted'];
+    if (has(object1, key) && !has(object2, key)) {
+      return { key, type: 'deleted' };
     }
-    if (!keysOfFileContent1.includes(key) && keysOfFileContent2.includes(key)) {
-      return [key, 'added'];
-    }
-    if (fileContent1[key] === fileContent2[key]) {
-      return [key, 'not changed'];
-    }
-    return [key, 'changed'];
+    return { key, type: 'added' };
   });
   return diff;
 };
