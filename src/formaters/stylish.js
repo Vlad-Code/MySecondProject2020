@@ -1,4 +1,5 @@
 import { isObject } from 'lodash';
+import compareKeys from './normalize';
 
 const stringify = (object, space) => {
   if (isObject(object)) {
@@ -10,15 +11,6 @@ const stringify = (object, space) => {
     return `{\n${space}${arrOfStr.join('\n')}\n${space}  }`;
   }
   return object;
-};
-const compareKeys = (node1, node2) => {
-  if (node1.key > node2.key) {
-    return 1;
-  }
-  if (node1.key < node2.key) {
-    return -1;
-  }
-  return 0;
 };
 const getStylish = (fileContent1, fileContent2, diff, space) => {
   const normalizeDiff = diff.sort(compareKeys);

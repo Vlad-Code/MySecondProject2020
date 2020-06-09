@@ -1,4 +1,5 @@
 import { isObject } from 'lodash';
+import compareKeys from './normalize';
 
 const stringify = (value) => {
   if (isObject(value)) {
@@ -10,15 +11,6 @@ const stringify = (value) => {
     return `"${value}"`;
   }
   return value;
-};
-const compareKeys = (node1, node2) => {
-  if (node1.key > node2.key) {
-    return 1;
-  }
-  if (node1.key < node2.key) {
-    return -1;
-  }
-  return 0;
 };
 const getStringForJson = (diff, fileContent1, fileContent2) => {
   const normalizeDiff = diff.sort(compareKeys);
