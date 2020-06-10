@@ -12,30 +12,30 @@ const stringify = (object, space) => {
   }
   return object;
 };
-const getStylish = (fileContent1, fileContent2, diff, space) => {
+const getStylish = (parsedData1, parsedData2, diff, space) => {
   const normalizeDiff = diff.sort(compareKeys);
   const arrOfStr = normalizeDiff.map((node) => {
     const { key, type, children } = node;
     if (!children) {
       switch (type) {
         case 'not changed':
-          return `${space}  ${key}: ${stringify(fileContent1[key], space)}`;
+          return `${space}  ${key}: ${stringify(parsedData1[key], space)}`;
         case 'deleted':
-          return `${space}- ${key}: ${stringify(fileContent1[key], space)}`;
+          return `${space}- ${key}: ${stringify(parsedData1[key], space)}`;
         case 'changed':
-          return [`${space}- ${key}: ${stringify(fileContent1[key], space)}`,
-            `${space}+ ${key}: ${stringify(fileContent2[key], space)}`];
+          return [`${space}- ${key}: ${stringify(parsedData1[key], space)}`,
+            `${space}+ ${key}: ${stringify(parsedData2[key], space)}`];
         case 'added':
-          return `${space}+ ${key}: ${stringify(fileContent2[key], space)}`;
+          return `${space}+ ${key}: ${stringify(parsedData2[key], space)}`;
         default:
           throw new Error(`Unknown type: ${type}`);
       }
     }
-    return `  ${space}${key}: {\n${getStylish(fileContent1[key], fileContent2[key], children, `${space}    `)}\n${space}  }`;
+    return `  ${space}${key}: {\n${getStylish(parsedData1[key], parsedData2[key], children, `${space}    `)}\n${space}  }`;
   });
   const result = arrOfStr.flat().join('\n');
   return result;
 };
-const getResultStylish = (fileContent1, fileContent2, diff, space) => `{\n${getStylish(fileContent1, fileContent2, diff, space)}\n}`;
+const getResultStylish = (parsedData1, parsedData2, diff, space) => `{\n${getStylish(parsedData1, parsedData2, diff, space)}\n}`;
 
 export default getResultStylish;

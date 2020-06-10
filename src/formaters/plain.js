@@ -29,7 +29,7 @@ const getValue = (path, object) => {
   }, object);
   return value;
 };
-const getPlain = (diff, fileContent1, fileContent2, path = '') => {
+const getPlain = (diff, parsedData1, parsedData2, path = '') => {
   const pathesAndValues = iter(diff, path).flat(Infinity).sort();
   const arrOfStr = pathesAndValues.map((item) => {
     const [accumulatedPath, type] = Object.entries(item).flat();
@@ -39,9 +39,9 @@ const getPlain = (diff, fileContent1, fileContent2, path = '') => {
       case 'deleted':
         return `Property '${accumulatedPath}' was deleted`;
       case 'changed':
-        return `Property '${accumulatedPath}' was changed from ${stringify(getValue(accumulatedPath, fileContent1))} to ${stringify(getValue(accumulatedPath, fileContent2))}`;
+        return `Property '${accumulatedPath}' was changed from ${stringify(getValue(accumulatedPath, parsedData1))} to ${stringify(getValue(accumulatedPath, parsedData2))}`;
       case 'added':
-        return `Property '${accumulatedPath}' was added with value: ${stringify(getValue(accumulatedPath, fileContent2))}`;
+        return `Property '${accumulatedPath}' was added with value: ${stringify(getValue(accumulatedPath, parsedData2))}`;
       default:
         throw new Error(`Unknown type: ${type}`);
     }

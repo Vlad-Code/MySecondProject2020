@@ -12,7 +12,7 @@ const stringify = (value) => {
   }
   return value;
 };
-const getStringForJson = (diff, fileContent1, fileContent2) => {
+const getStringForJson = (diff, parsedData1, parsedData2) => {
   const normalizeDiff = diff.sort(compareKeys);
   const arrOfJsonStrings = normalizeDiff.map((node) => {
     const { key, type, children } = node;
@@ -23,19 +23,19 @@ const getStringForJson = (diff, fileContent1, fileContent2) => {
         case 'deleted':
           return `{"key":${stringify(key)}, "status":${stringify(type)}}`;
         case 'changed':
-          return `{"key":${stringify(key)}, "status":${stringify(type)}, "value-before":${stringify(fileContent1[key])}, "value-after":${stringify(fileContent2[key])}}`;
+          return `{"key":${stringify(key)}, "status":${stringify(type)}, "value-before":${stringify(parsedData1[key])}, "value-after":${stringify(parsedData2[key])}}`;
         case 'added':
-          return `{"key":${stringify(key)}, "status":${stringify(type)}, "value": ${stringify(fileContent2[key])}}`;
+          return `{"key":${stringify(key)}, "status":${stringify(type)}, "value": ${stringify(parsedData2[key])}}`;
         default:
           throw new Error(`Unknown type: ${type}`);
       }
     }
-    return `{"key":${stringify(key)}, "value":[${getStringForJson(children, fileContent1[key], fileContent2[key])}]}`;
+    return `{"key":${stringify(key)}, "value":[${getStringForJson(children, parsedData1[key], parsedData2[key])}]}`;
   });
   return `${arrOfJsonStrings.join(', ')}`;
 };
-const getJson = (diff, fileContent1, fileContent2) => {
-  const result = `[${getStringForJson(diff, fileContent1, fileContent2)}]`;
+const getJson = (diff, parsedData1, parsedData2) => {
+  const result = `[${getStringForJson(diff, parsedData1, parsedData2)}]`;
   const jsonFormat = JSON.parse(result);
   return JSON.stringify(jsonFormat);
 };
