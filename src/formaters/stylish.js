@@ -1,20 +1,15 @@
 import { isObject } from 'lodash';
-import compareKeys from './normalize';
 
-const stringify = (object, space) => {
-  if (isObject(object)) {
-    const keysOfObject = Object.keys(object);
-    const arrOfStr = keysOfObject.reduce((acc, key) => {
-      acc.push(`      ${key}: ${object[key]}`);
-      return acc;
-    }, []);
-    return `{\n${space}${arrOfStr.join('\n')}\n${space}  }`;
+const stringify = (value, space) => {
+  if (!isObject(value)) {
+    return value;
   }
-  return object;
+  const keysOfObject = Object.keys(value);
+  const arrOfStr = keysOfObject.reduce((acc, key) => [...acc, `      ${key}: ${value[key]}`], []);
+  return `{\n${space}${arrOfStr.join('\n')}\n${space}  }`;
 };
 const getStylish = (parsedData1, parsedData2, diff, space) => {
-  const normalizeDiff = diff.sort(compareKeys);
-  const arrOfStr = normalizeDiff.map((node) => {
+  const arrOfStr = diff.map((node) => {
     const { key, type, children } = node;
     if (!children) {
       switch (type) {

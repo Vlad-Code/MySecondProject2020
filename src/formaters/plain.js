@@ -30,7 +30,7 @@ const getValue = (path, object) => {
   return value;
 };
 const getPlain = (diff, parsedData1, parsedData2, path = '') => {
-  const pathesAndValues = iter(diff, path).flat(Infinity).sort();
+  const pathesAndValues = iter(diff, path).flat(Infinity);
   const arrOfStr = pathesAndValues.map((item) => {
     const [accumulatedPath, type] = Object.entries(item).flat();
     switch (type) {

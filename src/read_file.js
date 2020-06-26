@@ -7,12 +7,5 @@ const readFile = (pathToFile) => {
   const data = fs.readFileSync(configPath, 'utf8');
   return data;
 };
-const getExtensionOfPath = (pathToFile) => {
-  const extension = path.extname(pathToFile);
-  return extension;
-};
 
-export {
-  readFile,
-  getExtensionOfPath,
-};
+export default readFile;
