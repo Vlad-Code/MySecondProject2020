@@ -9,44 +9,38 @@ const stringify = (value) => {
   }
   return value;
 };
-const iter = (diff, path = '') => {
-  const accumulatedPath = diff.map((node) => {
+const getPlainNodes = (diff, path = '') => {
+  const plainNodes = diff.map((node) => {
     const { key, type, children } = node;
-    if (!children) {
-      const pathToValue = `${path}${key}`;
-      return { [pathToValue]: type };
+    if (type !== 'parent') {
+      const accPath = `${path}${key}`;
+      return { ...node, key: accPath };
     }
     const newPath = `${path}${key}.`;
-    return iter(children, newPath);
+    return getPlainNodes(children, newPath);
   });
-  return accumulatedPath;
+  return plainNodes.flat(Infinity);
 };
-const getValue = (path, object) => {
-  const arrOfPath = path.split('.');
-  const value = arrOfPath.reduce((acc, item) => {
-    const newValue = acc[item];
-    return newValue;
-  }, object);
-  return value;
-};
-const getPlain = (diff, parsedData1, parsedData2, path = '') => {
-  const pathesAndValues = iter(diff, path).flat(Infinity);
-  const arrOfStr = pathesAndValues.map((item) => {
-    const [accumulatedPath, type] = Object.entries(item).flat();
+const getPlain = (diff, path = '') => {
+  const plainNodes = getPlainNodes(diff, path);
+  const strings = plainNodes.map((node) => {
+    const {
+      key, type, value, valueBefore, valueAfter,
+    } = node;
     switch (type) {
       case 'not changed':
-        return `Property '${accumulatedPath}' was not changed`;
+        return `Property '${key}' was not changed`;
       case 'deleted':
-        return `Property '${accumulatedPath}' was deleted`;
+        return `Property '${key}' was deleted`;
       case 'changed':
-        return `Property '${accumulatedPath}' was changed from ${stringify(getValue(accumulatedPath, parsedData1))} to ${stringify(getValue(accumulatedPath, parsedData2))}`;
+        return `Property '${key}' was changed from ${stringify(valueBefore)} to ${stringify(valueAfter)}`;
       case 'added':
-        return `Property '${accumulatedPath}' was added with value: ${stringify(getValue(accumulatedPath, parsedData2))}`;
+        return `Property '${key}' was added with value: ${stringify(value)}`;
       default:
         throw new Error(`Unknown type: ${type}`);
     }
   });
-  return arrOfStr.sort().join('\n');
+  return strings.join('\n');
 };
 
 export default getPlain;

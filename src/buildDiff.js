@@ -16,16 +16,16 @@ const getDiff = (object1, object2) => {
       return { key, type: 'added', value: object2[key] };
     }
     if (!has(object2, key)) {
-      return { key, type: 'deleted' };
+      return { key, type: 'deleted', value: object1[key] };
     }
     if (isObject(object1[key]) && isObject(object2[key])) {
       return { key, type: 'parent', children: getDiff(object1[key], object2[key]) };
     }
     if (object1[key] === object2[key]) {
-      return { key, type: 'not changed' };
+      return { key, type: 'not changed', value: object1[key] };
     }
     return {
-      key, type: 'changed', value_before: object1[key], value_after: object2[key],
+      key, type: 'changed', valueBefore: object1[key], valueAfter: object2[key],
     };
   });
   const sortedDiff = diff.sort(compareKeys);

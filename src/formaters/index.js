@@ -2,14 +2,14 @@ import getResultStylish from './stylish';
 import getPlain from './plain';
 import getJson from './json';
 
-const getResult = (parsedData1, parsedData2, diff, format) => {
+const getResult = (diff, format) => {
   switch (format) {
     case 'stylish':
-      return getResultStylish(parsedData1, parsedData2, diff, '  ');
+      return getResultStylish(diff, '  ');
     case 'plain':
-      return getPlain(diff, parsedData1, parsedData2);
+      return getPlain(diff);
     case 'json':
-      return getJson(diff, parsedData1, parsedData2);
+      return getJson(diff);
     default:
       throw new Error(`Unknown format of output: ${format}`);
   }

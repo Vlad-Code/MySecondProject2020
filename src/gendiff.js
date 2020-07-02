@@ -12,7 +12,7 @@ const gendiff = (pathToFile1, pathToFile2, format) => {
   const parsedContentOfFile1 = parseData(contentOfFile1, extansionOfFile1);
   const parsedContentOfFile2 = parseData(contentOfFile2, extansionOfFile2);
   const diff = getDiff(parsedContentOfFile1, parsedContentOfFile2);
-  return getResult(parsedContentOfFile1, parsedContentOfFile2, diff, format);
+  return getResult(diff, format);
 };
 
 export default gendiff;
