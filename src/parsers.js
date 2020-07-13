@@ -10,7 +10,7 @@ const parseData = (data, extension) => {
     case '.ini':
       return ini.parse(data);
     default:
-      throw new Error(`Unsupported extension of path to file: '${extension}!'`);
+      throw new Error(`Unsupported extension of path to data: '${extension}!'`);
   }
 };
 

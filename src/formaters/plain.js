@@ -10,16 +10,29 @@ const stringify = (value) => {
   return value;
 };
 const getPlainNodes = (diff, path = '') => {
-  const plainNodes = diff.map((node) => {
-    const { key, type, children } = node;
-    if (type !== 'parent') {
-      const accPath = `${path}${key}`;
-      return { ...node, key: accPath };
+  const plainNodes = diff.flatMap((node) => {
+    const {
+      key, type, children, value, valueBefore, valueAfter,
+    } = node;
+    const accamulatedPath = `${path}${key}`;
+    switch (type) {
+      case 'added':
+        return { key: accamulatedPath, type, value };
+      case 'deleted':
+        return { key: accamulatedPath, type };
+      case 'not changed':
+        return { key: accamulatedPath, type };
+      case 'changed':
+        return {
+          key: accamulatedPath, type, valueBefore, valueAfter,
+        };
+      case 'parent':
+        return getPlainNodes(children, `${accamulatedPath}.`);
+      default:
+        throw new Error(`Unknown type: ${type}`);
     }
-    const newPath = `${path}${key}.`;
-    return getPlainNodes(children, newPath);
   });
-  return plainNodes.flat(Infinity);
+  return plainNodes;
 };
 const getPlain = (diff, path = '') => {
   const plainNodes = getPlainNodes(diff, path);

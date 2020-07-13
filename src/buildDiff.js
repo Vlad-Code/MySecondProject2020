@@ -1,16 +1,7 @@
 import { union, isObject, has } from 'lodash';
 
-const compareKeys = (node1, node2) => {
-  if (node1.key > node2.key) {
-    return 1;
-  }
-  if (node1.key < node2.key) {
-    return -1;
-  }
-  return 0;
-};
 const getDiff = (object1, object2) => {
-  const commonKeys = union(Object.keys(object1), Object.keys(object2));
+  const commonKeys = union(Object.keys(object1), Object.keys(object2)).sort();
   const diff = commonKeys.map((key) => {
     if (!has(object1, key)) {
       return { key, type: 'added', value: object2[key] };
@@ -28,8 +19,7 @@ const getDiff = (object1, object2) => {
       key, type: 'changed', valueBefore: object1[key], valueAfter: object2[key],
     };
   });
-  const sortedDiff = diff.sort(compareKeys);
-  return sortedDiff;
+  return diff;
 };
 
 export default getDiff;

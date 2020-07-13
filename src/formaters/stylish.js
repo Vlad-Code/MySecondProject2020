@@ -5,11 +5,11 @@ const stringify = (value, space) => {
     return value;
   }
   const keysOfObject = Object.keys(value);
-  const arrOfStr = keysOfObject.reduce((acc, key) => [...acc, `      ${key}: ${value[key]}`], []);
-  return `{\n${space}${arrOfStr.join('\n')}\n${space}  }`;
+  const comlexValues = keysOfObject.map((key) => `      ${key}: ${value[key]}`);
+  return `{\n${space}${comlexValues.join('\n')}\n${space}  }`;
 };
 const getStylish = (diff, space) => {
-  const keyStates = diff.map((node) => {
+  const keyStates = diff.flatMap((node) => {
     const {
       key, type, children, value, valueBefore, valueAfter,
     } = node;
@@ -29,7 +29,7 @@ const getStylish = (diff, space) => {
         throw new Error(`Unknown type: ${type}`);
     }
   });
-  const result = keyStates.flat().join('\n');
+  const result = keyStates.join('\n');
   return result;
 };
 const getResultStylish = (diff, space) => `{\n${getStylish(diff, space)}\n}`;
